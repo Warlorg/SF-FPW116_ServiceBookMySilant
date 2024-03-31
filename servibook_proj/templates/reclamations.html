@@ -1,0 +1,157 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_tags %}
+
+{% block title %}
+    Рекламации
+{% endblock title %}
+
+{% block content %}
+<section id="title">
+    {% if request.user.is_authenticated %}
+        <div class="row">
+            <h3 class="col-sm text-center">Информация о рекламациях</h3>
+        </div>
+    {% endif %}
+</section>
+
+<section id="nav_links" class="mx-auto w-auto">
+    <div class="table-responsive-md justify-content-center align-items-center my-2">
+        <table class="table table-sm table-hover border-bottom border-dark border-3 mb-4 align-middle">
+            <thead>
+                  <tr>
+                      {% if request.user.is_authenticated %}
+                      <th class="text-center">
+                          <img width="40px" height="35px" src="/static/images/vehicles.png" alt="Машины">
+                          <a href="/">Машины</a>
+                      </th>
+                      {% endif %}
+                      {% if request.user.is_authenticated %}
+                      <th class="text-center">
+                          <img width="40px" height="35px" src="/static/images/maintenance.jpg" alt="ТО">
+                          <a href="/maintenances">Техническое обслуживание</a>
+                      </th>
+                      {% endif %}
+                      {% if request.user.is_authenticated %}
+                      <th class="text-center">
+                          <img width="40px" height="35px" src="/static/images/claim.jpg" alt="Рекламации">
+                          <a href="/reclamations">Рекламации</a>
+                      </th>
+                        {% endif %}
+                        {% if perms.silant_servibook.add_reclamation %}
+                        <th class="text-center">
+                            <img width="40px" height="35px" src="/static/images/note.jpg" alt="Рекламация">
+                            <a href="/reclamations/create/">Добавить запись о рекламации</a>
+                        </th>
+                    {% endif %}
+                  </tr>
+            </thead>
+        </table>
+    </div>
+</section>
+
+<section id="search_tabs">
+    <div class="formWrapper">
+        <form class="form form-control" style="background-color: #D20A11;">
+            <div class="d-sm-flex text-center justify-content-evenly align-items-center my-2 text-white">
+                {{ filter_set.form }}
+              <input class="btn btn-primary" type="submit" value="Поиск"/>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section id="reclamations_table" class="mt-2 mx-auto w-auto" style="font-size: 14px;">
+    <div class="table-responsive-md my-2 justify-content-center">
+        {% if reclamations %}
+        <table class="table table-sm table-bordered border-light align-middle my-1">
+            <thead>
+                <tr class="table_header text-center text-white align-middle" style="background-color: #163e6c">
+                    <th>Дата отказа</th>
+                    <th>Зав. № машины</th>
+                    <th>Наработка, м/час</th>
+                    <th>Узел отказа</th>
+                    <th>Описание отказа</th>
+                    <th>Способ восстановления</th>
+                    <th>Используемые запасные части</th>
+                    <th>Дата восстановления</th>
+                    <th>Время простоя, дни</th>
+                    <th>Сервисная компания</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reclamation in reclamations %}
+                <tr class="table_body text-center" style="background-color: whitesmoke">
+                    <td>
+                        <a href="{% url 'reclamation_detail' reclamation.pk %}">
+                                {{ reclamation.failure_date|date:'d.m.Y' }}
+                        </a>
+                    </td>
+                    <td><a href="{% url 'vehicle_detail' reclamation.vehicle.pk %}">{{ reclamation.vehicle }}</a></td>
+                    <td>{{ reclamation.operating_time }}</td>
+                    <td>
+                        <a href="{% url 'failure_unit_detail' reclamation.failure_unit.pk %}">
+                        {{ reclamation.failure_unit }}
+                        </a>
+                    </td>
+                    <td>{{ reclamation.failure_description }}</td>
+                    <td>
+                        <a href="{% url 'repair_procedure_detail' reclamation.repair_procedure.pk %}">
+                                {{ reclamation.repair_procedure }}
+                        </a>
+                    </td>
+                    <td>{{ reclamation.spare_parts }}</td>
+                    <td>{{ reclamation.repair_date|date:'d.m.Y' }}</td>
+                    <td>{{ reclamation.nonuse_time }}</td>
+                    <td>
+                        <a href="{% url 'service_department_detail' reclamation.service_department.pk %}">
+                            {{ reclamation.service_department }}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% else %}
+<div class="row">
+    <h2 class="col-sm text-center">Рекламаций с такими параметрами в базе данных не найдено!</h2>
+</div>
+{% endif %}
+
+<section id="pagination" class="mt-2">
+    {% if page_obj.has_other_pages %}
+    <p class="text-center">
+        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+    </p>
+    <nav aria-label="Навигация по страницам таблицы">
+        <ul class="pagination justify-content-center mt-2">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                <span aria-hidden="true">&lsaquo;</span></a>
+            </li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span>
+                    </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><span
+                        aria-hidden="true">&rsaquo;</span></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</section>
+{% endblock content %}

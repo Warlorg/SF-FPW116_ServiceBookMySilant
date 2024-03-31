@@ -1,0 +1,8 @@
+@font-face {
+    src: url('../../fonts/PT-Astra-Sans_Regular.ttf');
+    font-family: 'PT Astra Sans Regular';
+}
+
+:root {
+   --bs-body-font-family: 'PT Astra Sans Regular', sans-serif; /* PT-Astra-Sans теперь определён как CSS-переменная */
+}

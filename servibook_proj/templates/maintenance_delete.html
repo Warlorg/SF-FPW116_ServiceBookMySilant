@@ -1,0 +1,28 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    Удаление записи о ТО
+{% endblock title %}
+
+{% block content %}
+<section id="title">
+    <div class="row justify-content-center align-items-center">
+        <h3 class="col-sm text-center">Удаление записи о ТО</h3>
+    </div>
+</section>
+
+<section id="delete_form" class="mx-auto w-auto my-2">
+    <div class="row my-2 text-center">
+        <form class="col-sm justify-content-end mb-3" method="post">
+            {% csrf_token %}
+            <p>Удалить запись о техническом обслуживании машины с номером {{ maintenance.vehicle }}?</p>
+            <input class="btn btn-danger mt-2" type="submit" value="Удалить">
+        </form>
+    </div>
+    <div class="div_button mt-3">
+         <a class="a_button" href="/maintenances/{{ maintenance.pk }}">
+             <button class="btn" style="background-color: #1d70b7; color: #ffffff">Назад</button>
+         </a>
+     </div>
+</section>
+{% endblock content %}

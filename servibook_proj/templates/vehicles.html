@@ -1,0 +1,204 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_tags %}
+
+{% block title %}
+    "Мой Силант" - Машины
+{% endblock title %}
+
+{% block content %}
+<section id="title">
+    {% if request.user.is_authenticated %}
+        <div class="row">
+            <h3 class="col-sm text-center">Информация о комплектации и технических характеристиках вашей техники</h3>
+        </div>
+    {% endif %}
+</section>
+
+<section id="nav_links" class="mx-auto w-auto">
+    <div class="table-responsive-md justify-content-center align-items-center my-2">
+      <table class="table table-sm table-hover border-bottom border-dark border-3 mb-4 align-middle">
+        <thead>
+          <tr>
+            {% if request.user.is_authenticated %}
+            <th class="text-center">
+              <img width="40px" height="35px" src="/static/images/vehicles.png" alt="Машины">
+              <a href="/">Машины</a>
+            </th>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+            <th class="text-center">
+              <img width="40px" height="35px" src="/static/images/maintenance.jpg" alt="ТО">
+              <a href="/maintenances">Техническое обслуживание</a>
+            </th>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+            <th class="text-center">
+              <img width="40px" height="35px" src="/static/images/claim.jpg" alt="Рекламации">
+              <a href="/reclamations">Рекламации</a>
+            </th>
+            {% endif %}
+            {% if perms.silant_servibook.add_vehicle %}
+            <th class="text-center">
+              <img width="40px" height="35px" src="/static/images/vehicle.jpg" alt="Добавление записи">
+              <a href="/vehicles/create/">Добавить запись о машине</a>
+            </th>
+            {% endif %}
+          </tr>
+        </thead>
+      </table>
+    </div>
+</section>
+
+<section id="search_tabs">
+    {% if not request.user.is_authenticated %}
+    <div class="row mb-3">
+        <h2 class="col-sm text-center">Проверьте комплектацию и технические характеристики техники "Силант"</h2>
+    </div>
+    <form class="form form-control" style="background-color: #D20A11;">
+        <div class="d-md-flex justify-content-center text-center align-items-center text-white">
+                {{ filter_set.form }}
+        <input class="btn btn-primary mx-3" type="submit" value="Поиск"/>
+        </div>
+    </form>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+    <form class="form form-control" style="background-color: #D20A11;">
+        <div class="d-md-flex text-center justify-content-evenly align-items-center my-2 text-white">
+            {{ filter_set.form }}
+            <input class="btn btn-primary mx-3" type="submit" value="Поиск"/>
+        </div>
+    </form>
+    {% endif %}
+</section>
+
+<section id="vehicles_table" class="mt-2 w-auto mx-auto" style="font-size: 15px;">
+    <div class="table-responsive-lg my-2 justify-content-center">
+        {% if vehicles %}
+        <table class="table table-sm table-bordered border-light align-middle my-1">
+            <thead>
+                <tr class="table-header text-center text-white align-middle" style="background-color: #163e6c">
+                   <th>Зав. № машины</th>
+                   <th>Модель техники</th>
+                   <th>Модель двигателя</th>
+                   <th>Зав. № двигателя</th>
+                   <th>Модель трансмиссии</th>
+                   <th>Зав. № трансмиссии</th>
+                   <th>Модель ведущего моста</th>
+                   <th>Зав. № ведущего моста</th>
+                   <th>Модель управляемого моста</th>
+                   <th>Зав. № управляемого моста</th>
+                   {% if request.user.is_authenticated %}
+                   <th>Договор поставки</th>
+                   <th>Дата отгрузки с завода</th>
+                   <th>Клиент</th>
+                   <th>Конечный потребитель</th>
+                   <th>Адрес поставки</th>
+                   <th>Комплектация</th>
+                   <th>Сервисная компания</th>
+                   {% endif %}
+                </tr>
+            </thead>
+        <tbody>
+           {% for vehicle in vehicles %}
+           <tr class="table_body text-center" style="background-color: whitesmoke">
+               <td><a href="{% url 'vehicle_detail' vehicle.pk %}">{{ vehicle.vehicle_number }}</a></td>
+               <td>
+                   <a href="{% url 'machinery_detail' vehicle.vehicle_model.pk %}">
+                       {{ vehicle.vehicle_model }}
+                   </a>
+               </td>
+               <td><a href="{% url 'engine_detail' vehicle.engine_model.pk %}">{{ vehicle.engine_model }}</a></td>
+               <td>{{ vehicle.engine_number }}</td>
+               <td>
+                   <a href="{% url 'transmission_detail' vehicle.transmission_model.pk %}">
+                       {{ vehicle.transmission_model }}
+                   </a>
+               </td>
+               <td>{{ vehicle.transmission_number }}</td>
+               <td>
+                   <a href="{% url 'drive_axle_detail' vehicle.drive_axle_model.pk %}">
+                       {{ vehicle.drive_axle_model }}
+                   </a>
+               </td>
+               <td>{{ vehicle.drive_axle_number }}</td>
+               <td>
+                   <a href="{% url 'steer_axle_detail' vehicle.steer_axle_model.pk %}">
+                       {{ vehicle.steer_axle_model }}
+                   </a>
+               </td>
+               <td>{{ vehicle.steer_axle_number }}</td>
+               {% if request.user.is_authenticated %}
+               <td>{{ vehicle.delivery_contract }}</td>
+               <td>{{ vehicle.shipment_date|date:'d.m.Y' }}</td>
+               <td><a href="{% url 'client_detail' vehicle.customer.pk %}">{{ vehicle.customer }}</a></td>
+               <td>{{ vehicle.end_user }}</td>
+               <td>{{ vehicle.shipping_address }}</td>
+               <td>
+                <div class="dropstart">
+                  <a href="#" role="button" data-toggle="dropdown" class="dropdown-toggle" data-bs-toggle="dropdown"
+                     aria-expanded="false">
+                    Список
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item text-wrap">{{ vehicle.configuration|linebreaks }}</a>
+                    </li>
+                  </ul>
+                </div>                
+              </td>
+               <td>
+                   <a href="{% url 'service_department_detail' vehicle.service_department.pk %}">
+                       {{ vehicle.service_department }}
+                   </a>
+               </td>
+               {% endif %}
+           </tr>
+           {% endfor %}
+        </tbody>         
+       </table>
+    </div>
+</section>
+{% else %}
+<div class="row">
+    <h3 class="col-sm text-center">
+        Машин с такими характеристиками в базе данных не найдено, попробуйте изменить параметры запроса!
+    </h3>
+</div>
+{% endif %}
+
+<section id="pagination" class="mt-2">
+    {% if page_obj.has_other_pages %}
+    <p class="text-center">
+        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+    </p>
+    <nav aria-label="Навигация по страницам таблицы">
+        <ul class="pagination justify-content-center mt-2">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                <span aria-hidden="true">&lsaquo;</span></a>
+            </li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span>
+                    </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><span
+                        aria-hidden="true">&rsaquo;</span></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</section>
+{% endblock content %}

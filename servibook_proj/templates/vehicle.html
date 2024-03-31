@@ -1,0 +1,143 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    Машина
+{% endblock title %}
+
+{% block content %}
+<section id="title">
+    <div class="row justify-content-center align-items-center">
+        <h3 class="col-sm text-center">Информация о машине</h3>
+    </div>
+</section>
+
+<section id="edit_options">
+    <div class="row justify-content-center align-items-center">
+        {% if perms.silant_servibook.change_vehicle %}
+        <div class="col-6 col-sm-2 text-center">
+            <a class="inactive_tab" href="/vehicles/{{ vehicle.pk }}/update/">
+                Редактировать
+            </a>
+        </div>
+        {% endif %}
+        {% if perms.silant_servibook.delete_vehicle %}
+        <div class="col-6 col-sm-2 text-center">
+            <a class="inactive_tab" href="/vehicles/{{ vehicle.pk }}/delete/">
+                Удалить
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="mx-auto w-auto my-1 text-start">
+    <div class="table-responsive-sm justify-content-center align-items-center my-2">
+        <table class="table table-sm table-striped p-5">
+            <thead>
+                <tr>
+                    <th>Параметр</th>
+                    <th>Значение</th>
+                    <th>Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Зав. № машины</td>
+                    <td>{{ vehicle.vehicle_number }}<td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Модель техники</td>
+                    <td>
+                        <a href="{% url 'machinery_detail' vehicle.vehicle_model.pk %}">{{ vehicle.vehicle_model }}</a>
+                    </td>
+                    <td>{{ vehicle.vehicle_model.description }}</td>
+                </tr>
+                <tr>
+                    <td>Модель двигателя</td>
+                    <td><a href="{% url 'engine_detail' vehicle.engine_model.pk %}">{{ vehicle.engine_model }}</a></td>
+                    <td>{{ vehicle.engine_model.description }}</td>
+                </tr>
+                <tr>
+                    <td>Зав. № двигателя</td>
+                    <td>{{ vehicle.engine_number }}</td>
+                </tr>
+                <tr>
+                    <td>Модель трансмиссии</td>
+                    <td>
+                        <a href="{% url 'transmission_detail' vehicle.transmission_model.pk %}">
+                            {{ vehicle.transmission_model }}</a>
+                    </td>
+                    <td>{{ vehicle.transmission_model.description }}</td>
+                </tr>
+                <tr>
+                    <td>Зав. № трансмиссии</td>
+                    <td>{{ vehicle.transmission_number }}</td>
+                </tr>
+                <tr>
+                    <td>Модель ведущего моста</td>
+                    <td><a href="{% url 'drive_axle_detail' vehicle.drive_axle_model.pk %}">
+                       {{ vehicle.drive_axle_model }}</a>
+                    </td>
+                    <td>{{ vehicle.drive_axle_model.description }}</td>
+                </tr>
+                <tr>
+                    <td>Зав. № ведущего моста</td>
+                    <td>{{ vehicle.drive_axle_number }}</td>
+                </tr>
+                <tr>
+                    <td>Модель управляемого моста</td>
+                    <td><a href="{% url 'steer_axle_detail' vehicle.steer_axle_model.pk %}">
+                       {{ vehicle.steer_axle_model }}
+                   </a></td>
+                    <td>{{ vehicle.steer_axle_model.description }}</td>
+                </tr>
+                <tr>
+                    <td>Зав. № управляемого моста</td>
+                    <td>{{ vehicle.steer_axle_number }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Договор поставки</td>
+                    <td>{{ vehicle.delivery_contract }}</td>
+                    <td>{{ vehicle.delivery_contract.description }}</td>
+                </tr>
+                <tr>
+                    <td>Дата отгрузки с завода</td>
+                    <td>{{ vehicle.shipment_date|date:'d.m.Y' }}</td>
+                </tr>
+                <tr>
+                    <td>Клиент</td>
+                    <td><a href="{% url 'client_detail' vehicle.customer.pk %}">{{ vehicle.customer }}</a></td>
+                    <td>{{ vehicle.customer.description }}</td>
+                </tr>
+                <tr>
+                    <td>Конечный потребитель</td>
+                    <td>{{ vehicle.end_user }}</td>
+                </tr>
+                <tr>
+                    <td>Адрес поставки</td>
+                    <td>{{ vehicle.shipping_address }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Комплектация</td>
+                    <td>{{ vehicle.configuration|linebreaks }}</td>
+                </tr>
+                <tr>
+                    <td>Сервисная компания</td>
+                    <td><a href="{% url 'service_department_detail' vehicle.service_department.pk %}">
+                       {{ vehicle.service_department }}
+                   </a></td>
+                    <td>{{ vehicle.service_department.description }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+     <div class="div_button">
+         <a class="a_button" href="/">
+             <button class="btn" style="background-color: #1d70b7; color: #ffffff">Назад</button>
+         </a>
+     </div>
+</section>
+{% endblock content %}

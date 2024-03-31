@@ -1,0 +1,28 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h3 class="header text-center p-2 my-2" style="background-color: #D20A11; border-radius: 8px;">Авторизоваться</h3>
+<div class="d-sm-flex">    
+  <form 
+  class="form form-control my-1 text-white text-center"
+  method="post" 
+  action="{% url 'account_login' %}"
+  style="background-color: #163e6c;">
+    {% csrf_token %}
+    {% for field in form %}
+    <table class="fieldWrapper my-2 mx-auto w-auto text-start">
+      <tr>
+        <th>{{ field.label_tag }}</th>        
+      </tr>            
+      <tr>
+        <td>{{ field }}</td>
+      </tr>
+    </table>    
+    {% endfor %}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+    <button class="btn text-white mb-2" type="submit" style="background-color: #1d70b7;">Войти</button>
+  </form>
+</div>
+{% endblock %}

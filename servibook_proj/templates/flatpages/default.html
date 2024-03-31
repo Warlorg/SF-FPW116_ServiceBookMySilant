@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        {% block title %}
+            {{ flatpage.title }}
+        {% endblock title %}
+    </title>
+    {% load static %}
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" type="text/css" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/custom.css' %}" type="text/css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+</head>
+
+<body style="background-color: #ebe6d6">
+
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-md bg-light bg-opacity-75">
+            <div class="container-fluid">
+                <div class="navbar-header me-auto mb-2 mb-lg-0">
+                    <a class="navbar-brand ms-5" href="/">
+                        <img width="80px" class="logo" src="{% static 'images/logo.jpg' %}" alt="logo"></a>
+                </div>
+
+                <ul class="nav navbar-nav align-items-center me-auto mb-2 mb-lg-0">
+                    <li>
+                        <a class="nav-link" href="https://chzsa.ru/product/">
+                            <img width="140px" src="{% static 'images/silant_factory.png' %}" alt="logo"></a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/">
+                                <img class="items_content" width="140px" src="{% static 'images/pogruzchik.png' %}"
+                                     alt="logo"></a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-right align-items-center ms-auto mb-2 mb-lg-0">
+                    <li>
+                        <a class="nav-link" href="https://t.me/chzsa21">
+                            <img class="logo_telegram" width="40px" src="{% static 'images/logotelegram.png' %}"
+                                       alt="telegram"></a>
+                    </li>
+                    <li class="nav-item"><span>+7 (8352) 20-12-09</span></li>
+                </ul>
+
+                <div class="d-flex me-5 mx-auto">
+                    <div class="vr mx-3"></div>
+                    {% if not request.user.is_authenticated %}
+                        <a href="{% url 'account_login' %}">
+                            <button type="button" class="btn btn-outline-light"
+                                            style="background-color: #D20A11; border-radius: 20px">Авторизация</button>
+                        </a>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'account_logout' %}">
+                            <button type="button" class="btn btn-outline-light btn-sm"
+                                            style="background-color: #D20A11; border-radius: 20px;">Выход: {{ request.user }}
+                            </button>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container-fluid">
+            <div class="row mt-4 mx-auto">
+                <h2 class="col-sm text-center fw-bold">Электронная сервисная книжка "Мой Силант"</h2>
+            </div>
+
+        {% if request.user.is_authenticated %}
+            <div class="row my-3 align-self-start">
+                <h3 class="col-sm-3 offset-1 text-center p-2 rounded-2 bg-warning">
+                {{ request.user.groups.first.name }}: {{ request.user }}
+                </h3>
+            </div>
+        {% endif %}
+
+            <div class="container-fluid mx-auto">
+                <div class="row">
+                {% block content %}
+                    {{ flatpage.content }}
+                {% endblock %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+      <div class="container-fluid mb-4">
+        <div class="row align-items-center justify-content-md-evenly my-2">
+          <div class="col col-md-2 align-self-center">
+            <a href="/">
+              <img width="150px" src="{% static 'images/silant_factory.png' %}" alt="logo">
+            </a>
+          </div>
+          <span class="col col-md-2">+7 (8352) 20-12-09</span>
+          <div class="col col-md-2">
+            <a href="https://t.me/chzsa21">
+              <img width="20px" src="{% static 'images/logotelegram.png' %}" alt="telegram">
+            </a>
+          </div>
+          <span class="col col-md-3">Сервисная книга «Мой Силант» 2024</span>
+        </div>
+      </div>
+    </footer>
+
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    Техническое обслуживание
+{% endblock title %}
+
+{% block content %}
+<section id="title">
+    <div class="row justify-content-center align-items-center">
+        <h3 class="col-sm text-center">Информация о проведенных ТО вашей техники</h3>
+    </div>
+</section>
+
+<section id="edit_options">
+    <div class="row justify-content-center align-items-center">
+        {% if perms.silant_servibook.change_maintenance %}
+        <div class="col-6 col-sm-2 text-center">
+            <a class="inactive_tab" href="/maintenances/{{ maintenance.pk }}/update/">Редактировать</a>
+        </div>
+        {% endif %}
+        {% if perms.silant_servibook.delete_maintenance %}
+        <div class="col-6 col-sm-2 text-center">
+            <a class="inactive_tab" href="/maintenances/{{ maintenance.pk }}/delete/">Удалить</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="mx-auto w-auto my-1 text-start">
+    <div class="table-responsive-sm justify-content-center align-items-center my-2">
+        <table class="table table-sm table-striped p-5">
+            <thead>
+                <tr>
+                    <th>Параметр</th>
+                    <th>Значение</th>
+                    <th>Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Зав. № машины</td>
+                    <td><a href="{% url 'vehicle_detail' maintenance.vehicle.pk %}">{{ maintenance.vehicle }}</a></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Вид ТО</td>
+                    <td>
+                        <a href="{% url 'maintenance_type_detail' maintenance.type.pk %}">{{ maintenance.type }}</a>
+                    </td>
+                    <td>{{ maintenance.type.description }}</td>
+                </tr>
+                <tr>
+                    <td>Дата проведения ТО</td>
+                    <td>{{ maintenance.maintenance_date|date:'d.m.Y' }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Наработка, м/час</td>
+                    <td>{{ maintenance.operating_time }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Номер заказ-наряда</td>
+                    <td>{{ maintenance.order_number }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Дата заказ-наряда</td>
+                    <td>{{ maintenance.order_date|date:'d.m.Y' }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Организация, проводившая ТО</td>
+                    <td>{{ maintenance.maintenance_service }}</td>
+                    <td>{{ maintenance.maintenance_service.description }}</td>
+                </tr>
+                <tr>
+                    <td>Сервисная компания</td>
+                    <td>
+                        <a href="{% url 'service_department_detail' maintenance.service_department.pk %}">
+                        {{ maintenance.service_department }}</a>
+                    </td>
+                    <td>{{ maintenance.service_department.description }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="backButton">
+        <a class="button" href="/maintenances/">
+            <button class="btn" style="background-color: #1d70b7; color: #ffffff">Назад</button>
+        </a>
+    </div>
+</section>
+{% endblock content %}

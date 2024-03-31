@@ -1,0 +1,17 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h3 class="header text-center p-1 my-2" style="background-color: #D20A11; border-radius: 8px;">Выход</h3>
+<div class="d-sm-flex">  
+  <form 
+  class="form form-control my-1 text-white text-center"
+  method="post" 
+  action="{% url 'account_logout' %}"
+  style="background-color: #163e6c;">
+    {% csrf_token %}  
+    <h5 class="header py-1">Вы уверены, что хотите выйти???</h5>
+    <button class="btn text-white mb-2" type="submit" style="background-color: #1d70b7;">Выход</button>
+    <p><a href="{% url 'account_login' %}">Отмена</a></p>
+  </form>  
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    Добавление/редактирование информации о рекламации
+{% endblock title %}
+
+{% block content %}
+<section id="title">
+    <div class="row">
+        <h3 class="col-sm text-center">Добавление/редактирование информации о рекламации</h3>
+    </div>
+</section>
+
+<section id="reclamation_form" class="mx-auto w-auto my-2 text-start">
+    <form class="table-responsive-md justify-content-center align-items-center" method="post">
+        {% csrf_token %}
+        <table class="table table-sm table-hover my-2 align-middle text-white"
+                   style="background-color: #163e6c">
+            {{ form.as_table }}
+        </table>
+        <p class="text-center mb-2"><input class="btn btn-primary" type="submit" value="Сохранить"/></p>
+    </form>
+    <div class="div_button">
+         <a class="a_button" href="/reclamations/">
+             <button class="btn" style="background-color: #1d70b7; color: #ffffff">Назад</button>
+         </a>
+    </div>
+</section>
+{% endblock content %}

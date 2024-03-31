@@ -1,0 +1,41 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    Справочник
+{% endblock title %}
+
+{% block content %}
+<section id="title">
+    <div class="row justify-content-center align-items-center">
+        <h3 class="col-sm text-center">Справочник: {{ information }}</h3>
+    </div>
+</section>
+
+<section>
+    <div class="container my-2 mx-auto">
+        <div class="row justify-content-center align-items-center my-2">
+            <table class="table table-responsive-sm table-bordered align-middle my-1"
+                  style="width: 40%;">
+                <thead>
+                    <tr class="table_header text-center text-white align-middle"
+                        style="background-color: #163e6c">
+                        <th style="border: 1px solid #ddd; padding: 10px; font-size: 14pt;">Название</th>
+                        <th style="border: 1px solid #ddd; padding: 10px; font-size: 14pt;">Описание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table_body text-center" style="background-color: white">
+                        <td style="border: 1px solid #ddd; padding: 8px; font-size: 13pt;">{{ information.title }}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; font-size: 13pt;">{{ information.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col my-3 text-center">
+            <a class="a_button" href="/">
+                <button class="btn" style="background-color: #1d70b7; color: #ffffff">Назад</button>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock content %}

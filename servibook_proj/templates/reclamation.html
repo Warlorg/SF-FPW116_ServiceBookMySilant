@@ -1,0 +1,114 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    Рекламация
+{% endblock title %}
+
+{% block content %}
+<section id="title">
+    <div class="row justify-content-center align-items-center">
+        <h3 class="col-sm text-center">Информация о рекламации к технике</h3>
+    </div>
+</section>
+
+<section id="edit_options">
+    <div class="row justify-content-center align-items-center">
+        {% if perms.silant_servibook.change_reclamation %}
+        <div class="col-6 col-sm-2 text-center">
+            <a class="inactive_tab" href="/reclamations/{{ reclamation.pk }}/update/">
+                Редактировать
+            </a>
+        </div>
+        {% endif %}
+        {% if perms.silant_servibook.delete_reclamation %}
+        <div class="col-6 col-sm-2 text-center">
+            <a class="inactive_tab" href="/reclamations/{{ reclamation.pk }}/delete/">
+                Удалить
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="mx-auto w-auto my-1 text-start">
+    <div class="table-responsive-sm justify-content-center align-items-center my-2">
+        <table class="table table-sm table-striped p-5">
+            <thead>
+                <tr>
+                    <th>Параметр</th>
+                    <th>Значение</th>
+                    <th>Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Зав. № машины</td>
+                    <td><a href="{% url 'vehicle_detail' reclamation.vehicle.pk %}">{{ reclamation.vehicle }}</a></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Дата отказа</td>
+                    <td>{{ reclamation.failure_date|date:'d.m.Y' }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Наработка, м/час</td>
+                    <td>{{ reclamation.operating_time }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Узел отказа</td>
+                    <td><a href="{% url 'failure_unit_detail' reclamation.failure_unit.pk %}">
+                        {{ reclamation.failure_unit }}
+                        </a>
+                    </td>
+                    <td>{{ reclamation.failure_unit.description }}</td>
+                </tr>
+                <tr>
+                    <td>Описание отказа</td>
+                    <td>{{ reclamation.failure_description }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Способ восстановления</td>
+                    <td>
+                        <a href="{% url 'repair_procedure_detail' reclamation.repair_procedure.pk %}">
+                                {{ reclamation.repair_procedure }}
+                        </a>
+                    </td>
+                    <td>{{ reclamation.repair_procedure.description }}</td>
+                </tr>
+                <tr>
+                    <td>Используемые запасные части</td>
+                    <td>{{ reclamation.spare_parts }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Дата восстановления</td>
+                    <td>{{ reclamation.repair_date|date:'d.m.Y' }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Время простоя, дни</td>
+                    <td>{{ reclamation.nonuse_time }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Сервисная компания</td>
+                    <td>
+                        <a href="{% url 'service_department_detail' reclamation.service_department.pk %}">
+                            {{ reclamation.service_department }}
+                        </a>
+                    </td>
+                    <td>{{ reclamation.service_department.description }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_button">
+        <a class="a_button" href="/reclamations/">
+            <button class="btn" style="background-color: #1d70b7; color: #ffffff">Назад</button>
+        </a>
+    </div>
+</section>
+{% endblock content %}
