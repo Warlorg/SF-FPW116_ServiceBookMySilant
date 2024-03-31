@@ -62,7 +62,7 @@ API доступно по по ссылке:<pre><code> `http://127.0.0.0:8000/a
 
 **Склонируйте репозиторий командой:** <pre><code> `git clone https://github.com/Warlorg/SF-FPW116_ServiceBookMySilant.git` </code></pre> 
 
-**Создайте виртуальное окружение:** <pre><code>`python -m venv`</code></pre> 
+**Создайте виртуальное окружение:** <pre><code>`python -m venv .`</code></pre> 
 
 **Установите все зависимости:** <pre><code>`pip install -r .\requirements.txt`</code></pre> 
 
